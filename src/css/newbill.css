@@ -61,3 +61,20 @@ textarea:focus, input:focus, select:focus {
 *[placeholder] {
   color: #0E5AE5 !important;
 }
+
+#validate-file[data-error]::after {
+  content: attr(data-error);
+  font-size: .8em;
+  color: #e54858;
+  display: block;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  text-align: left;
+  line-height: .7;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+#validate-file[data-error-visible="true"]::after {
+  opacity: 1;
+}
