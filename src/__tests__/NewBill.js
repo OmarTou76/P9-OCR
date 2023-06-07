@@ -135,3 +135,23 @@ describe("Given I am connected as an employee", () => {
     })
   })
 })
+
+//POST
+describe("Given I am user connected as Employee", () => {
+  describe('When i select valid file', () => {
+    test('Then the API returns fileUrl and key', async () => {
+      const response = await mockStore.bills().create(bills[0])
+      expect(response.fileUrl).not.toBeUndefined()
+      expect(response.key).not.toBeUndefined()
+    })
+  })
+  describe("When i submit valid form", () => {
+    test('Then the API returns an object containing my sent data', async () => {
+      const response = await mockStore.bills().update(bills[0])
+      expect(response.id).toBe(bills[0].id)
+      expect(response.email).toBe(bills[0].email)
+      expect(response.name).toBe(bills[0].name)
+      expect(response.type).toBe(bills[0].type)
+    })
+  })
+})
