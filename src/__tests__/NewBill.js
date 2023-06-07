@@ -110,6 +110,7 @@ describe("Given I am connected as an employee", () => {
       expect(file.getAttribute("data-error-visible")).toBeTruthy()
       expect(file.getAttribute('data-error')).toBe("Seuls les fichiers au format JPEG, JPG et PNG sont acceptés.")
     })
+
     test('Then i upload valid format type', async () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
@@ -122,8 +123,7 @@ describe("Given I am connected as an employee", () => {
       await waitFor(() => screen.getByTestId('file'))
       const file = screen.getByTestId('file')
       const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e))
-      /* fireEvent.change(getByLabelText(/picture/i), {
-      }) */
+
       file.addEventListener('change', (e) => handleChangeFile(e))
       fireEvent.change(file, {
         target: {
@@ -153,5 +153,32 @@ describe("Given I am user connected as Employee", () => {
       expect(response.name).toBe(bills[0].name)
       expect(response.type).toBe(bills[0].type)
     })
+    test('Then the API returns error message 500', async () => {
+      jest.spyOn(mockStore, "bills")
+      mockStore.bills.mockImplementationOnce(() => {
+        return {
+          update: () => {
+            return Promise.reject(new Error("Erreur 500"))
+          }
+        }
+      })
+
+      const response = await mockStore.bills().update(bills[0])
+      expect(response).toEqual("Erreur 500")
+    })
+    test('Then the API returns error message 400', async () => {
+      jest.spyOn(mockStore, "bills")
+      mockStore.bills.mockImplementationOnce(() => {
+        return {
+          update: () => {
+            return Promise.reject(new Error("Erreur 400"))
+          }
+        }
+      })
+
+      const response = await mockStore.bills().update()
+      expect(response).toEqual("Erreur 400")
+    })
   })
+
 })
