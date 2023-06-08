@@ -94,11 +94,6 @@ describe("Given I am connected as an employee", () => {
       await waitFor(() => screen.getByTestId('file'))
       const file = screen.getByTestId('file')
       const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e))
-      /* fireEvent.change(getByLabelText(/picture/i), {
-        target: {
-          files: [new File(['(⌐□_□)'], 'chucknorris.png', {type: 'image/png'})],
-        },
-      }) */
       file.addEventListener('change', (e) => handleChangeFile(e))
       fireEvent.change(file, {
         target: {
@@ -153,6 +148,8 @@ describe("Given I am user connected as Employee", () => {
       expect(response.name).toBe(bills[0].name)
       expect(response.type).toBe(bills[0].type)
     })
+
+
     test('Then the API returns error message 500', async () => {
       jest.spyOn(mockStore, "bills")
       mockStore.bills.mockImplementationOnce(() => {
@@ -163,21 +160,19 @@ describe("Given I am user connected as Employee", () => {
         }
       })
 
-      const response = await mockStore.bills().update(bills[0])
-      expect(response).toEqual("Erreur 500")
+      await expect(mockStore.bills().update()).rejects.toThrow(Error("Erreur 500"));
     })
     test('Then the API returns error message 400', async () => {
       jest.spyOn(mockStore, "bills")
       mockStore.bills.mockImplementationOnce(() => {
         return {
           update: () => {
-            return Promise.reject(new Error("Erreur 400"))
+            return Promise.reject(new Error("Erreur 404"))
           }
         }
       })
 
-      const response = await mockStore.bills().update()
-      expect(response).toEqual("Erreur 400")
+      await expect(mockStore.bills().update()).rejects.toThrow(Error("Erreur 404"));
     })
   })
 
