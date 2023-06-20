@@ -99,6 +99,7 @@ describe("Given I am connected as an employee", () => {
   })
 })
 
+// GET
 describe("When I am on the Bills Page", () => {
   test("fetches bills from the mock API using GET", async () => {
     localStorage.setItem(
@@ -112,6 +113,7 @@ describe("When I am on the Bills Page", () => {
     window.onNavigate(ROUTES_PATH.Bills);
     await waitFor(() => screen.getByTestId('btn-new-bill'))
     expect(screen.getByTestId('title-content').textContent).toEqual('Mes notes de frais')
+    expect(screen.getByTestId('tbody')).toBeTruthy()
   });
   describe("When an error occurs on API", () => {
     beforeEach(() => {
