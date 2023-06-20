@@ -21,10 +21,10 @@ export default class NewBill {
     if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
       e.target.setAttribute('data-error-visible', true)
       e.target.setAttribute('data-error', "Seuls les fichiers au format JPEG, JPG et PNG sont acceptés.")
+      e.target.value = null;
       return
     }
     e.target.removeAttribute('data-error-visible')
-    //const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length - 1]
     const formData = new FormData()
